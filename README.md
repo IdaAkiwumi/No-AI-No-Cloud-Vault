@@ -23,7 +23,7 @@ In an era where cloud providers scan your personal data to train AI models, **De
 ### 🚀 Installation & Build
 
 #### **For Windows Users:**
-Just download the latest `DeCloudVault.exe` from the [Releases](https://github.com/YOUR_USERNAME/No-AI-No-Cloud-Vault/releases) page. No installation required.
+Just download the latest `DeCloudVault.exe` from the [Releases](https://github.com/IdaAkiwumi/No-AI-No-Cloud-Vault/releases) page. No installation required.
 
 #### **For Mac & Linux Users (Newbie Friendly):**
 Since Mac and Linux require Python to run the source code, follow these steps:
