@@ -14,10 +14,9 @@ class DeCloudVault(ctk.CTk):
         self.geometry("600x700")
         ctk.set_appearance_mode("dark")
         
-        # Security Setup
-        self.key_path = "vault.key"
-        self.key = self.get_or_create_key()
-        self.fernet = Fernet(self.key)
+        # Security Setup - Now allows user to choose key location
+        self.key_path = None
+        self.fernet = self.setup_encryption()
         self.temp_dirs = []
 
         # Custom Font for Buttons
@@ -52,12 +51,39 @@ class DeCloudVault(ctk.CTk):
         self.status = ctk.CTkLabel(self, text="Status: Ready", font=("Arial", 13, "bold"), text_color="#8FBC8F")
         self.status.pack(side="bottom", pady=20)
 
-    def get_or_create_key(self):
-        if not os.path.exists(self.key_path):
-            key = Fernet.generate_key()
-            with open(self.key_path, "wb") as f: f.write(key)
-            messagebox.showwarning("Key Created", "New 'vault.key' generated locally. BACK THIS UP!")
-        return open(self.key_path, "rb").read()
+    def setup_encryption(self):
+        # Initial choice
+        has_key = messagebox.askyesno("Key Setup", "Do you already have a 'decloud-vault.key' file?")
+        
+        if has_key:
+            path = filedialog.askopenfilename(title="Select your decloud-vault.key", filetypes=[("Key files", "*.key")])
+            if path:
+                self.key_path = path
+                return Fernet(open(path, "rb").read())
+            else:
+                messagebox.showerror("Error", "No key selected. App will now close.")
+                self.destroy()
+        else:
+            # IMPORTANT: Pre-save advisory
+            messagebox.showwarning("CRITICAL: Master Key Security", 
+                "You are about to create your Master Key.\n\n"
+                "1. If you lose this key, your encrypted files CANNOT be recovered.\n"
+                "2. We HIGHLY recommend saving copies in MULTIPLE places (e.g., an external Flash Drive AND your Desktop).\n"
+                "3. Do not store this key inside the same cloud folder you are encrypting.")
+            
+            # Create new key at user's chosen location with unique name
+            path = filedialog.asksaveasfilename(title="Choose where to save your NEW master key", 
+                                                defaultextension=".key", 
+                                                initialfile="decloud-vault.key")
+            if path:
+                key = Fernet.generate_key()
+                with open(path, "wb") as f:
+                    f.write(key)
+                self.key_path = path
+                messagebox.showinfo("Success", f"Key saved to: {path}\n\nPlease copy this file to a safe backup location (USB/External drive) now.")
+                return Fernet(key)
+            else:
+                self.destroy()
 
     def encrypt_action(self):
         file_paths = filedialog.askopenfilenames()
@@ -65,82 +91,57 @@ class DeCloudVault(ctk.CTk):
         
         count = 0
         for path in file_paths:
-            # Capture original timestamps
             stat = os.stat(path)
             orig_times = (stat.st_atime, stat.st_mtime)
-            
             with open(path, "rb") as f:
                 data = f.read()
-            
             encrypted = self.fernet.encrypt(data)
             vault_path = path + ".vault"
-            
             with open(vault_path, "wb") as f:
                 f.write(encrypted)
-            
-            # Transfer original timestamps to the vault file so we don't lose them
             os.utime(vault_path, orig_times)
-            
             os.remove(path)
             count += 1
-            
         self.status.configure(text=f"Locked {count} files. Originals safely removed.")
         messagebox.showinfo("Success", f"{count} files encrypted. Metadata preserved.")
 
     def peek_action(self):
         file_paths = filedialog.askopenfilenames(filetypes=[("Vault Files", "*.vault")])
         if not file_paths: return
-        
         temp_dir = tempfile.mkdtemp()
         self.temp_dirs.append(temp_dir)
-        
         for path in file_paths:
             try:
-                # Capture the "Original" timestamps from the vault file
                 stat = os.stat(path)
                 orig_times = (stat.st_atime, stat.st_mtime)
-
                 with open(path, "rb") as f:
                     decrypted = self.fernet.decrypt(f.read())
-                
                 orig_name = os.path.basename(path).replace(".vault", "")
                 temp_file = os.path.join(temp_dir, orig_name)
-                
                 with open(temp_file, "wb") as f:
                     f.write(decrypted)
-                
-                # Apply timestamps to temp file
                 os.utime(temp_file, orig_times)
-                
                 if os.name == 'nt': os.startfile(temp_file)
                 else: subprocess.run(['open', temp_file])
             except:
                 messagebox.showerror("Error", f"Failed to peek at {os.path.basename(path)}")
-
         self.status.configure(text="Viewing session active. Temp files will be wiped on exit.")
 
     def decrypt_action(self):
         file_paths = filedialog.askopenfilenames(filetypes=[("Vault Files", "*.vault")])
         if not file_paths: return
-        
         count = 0
         for path in file_paths:
             stat = os.stat(path)
             orig_times = (stat.st_atime, stat.st_mtime)
-
             with open(path, "rb") as f:
                 decrypted = self.fernet.decrypt(f.read())
-            
             orig_path = path.replace(".vault", "")
             with open(orig_path, "wb") as f:
                 f.write(decrypted)
-            
-            # Re-apply the original timestamps to the restored file
             os.utime(orig_path, orig_times)
-            
             os.remove(path)
             count += 1
-            
         self.status.configure(text=f"Successfully restored {count} files.")
 
     def on_closing(self):
