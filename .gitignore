@@ -1,0 +1,4 @@
+vault.key
+__pycache__/
+temp_*/
+*.pyc
