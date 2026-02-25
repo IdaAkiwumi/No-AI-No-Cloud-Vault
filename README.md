@@ -34,7 +34,8 @@ Since Mac and Linux require Python to run the source code, follow these steps:
     ```bash
     pip install customtkinter cryptography pillow
     ```
-4.  **Run the App:** ```bash
+4.  **Run the App:** 
+    ```bash
     python3 main.py
     ```
 
