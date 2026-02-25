@@ -45,10 +45,10 @@ Mac and Linux users run the app using Python. Follow these steps:
 To bundle the app into a standalone Windows executable:
 
 1. Clone the repo: `git clone https://github.com/IdaAkiwumi/No-AI-No-Cloud-Vault.git`
-2. Install dependencies: `pip install customtkinter cryptography pillow pyinstaller`
+2. Install dependencies: `pip install -r requirements.txt` or `pip install customtkinter cryptography pillow pyinstaller`
 3. Run the build command:
    ```bash
-   python -m PyInstaller --noconfirm --onefile --windowed --name "DeCloudVault" --icon="decloud-logo.ico" --add-data "decloud-logo.png;." --add-data "decloud-logo.ico;." main.py
+   python -m PyInstaller --noconfirm --onefile --windowed --name "DeCloudVault" --icon="decloud-logo.ico" --add-data "decloud-logo.png;." --add-data "decloud-logo.ico;." main.py'''
 
 ---
 
