@@ -68,8 +68,8 @@ Select "Compress to ZIP file" (Windows) or "Compress" (macOS).
 Open DeCloud Vault.
 
 Click 🔒 ENCRYPT FILES and select your new .zip file.
-
 Your folder is now a secure .vault file, ready for cloud storage.
+
 ---
 ## 🔍 Troubleshooting & FAQ
 1. "Error: Key mismatch or corrupted file"
