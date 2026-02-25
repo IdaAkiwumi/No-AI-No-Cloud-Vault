@@ -1,4 +1,4 @@
-# 🛡️ No-AI-No-Cloud Vault (DeCloud Vault)
+# 🛡️ No AI No Cloud Vault (DeCloud Vault)
 **Local-First, Zero-Knowledge Encryption for the Privacy-Conscious.**
 
 [![GitHub Sponsor](https://img.shields.io/badge/Sponsor-GitHub-EA4AAA?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/IdaAkiwumi)
