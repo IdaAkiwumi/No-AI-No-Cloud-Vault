@@ -70,17 +70,18 @@ class DeCloudVault(ctk.CTk):
         self.font_up = ctk.CTkButton(self.font_frame, text="A", width=25, height=20, command=lambda: self.change_font(1))
         self.font_up.pack(side="left", padx=1)
 
-        # --- 2. LOGO DISPLAY (Safe Load) ---
+       # --- 2. LOGO DISPLAY (Floating top-left) ---
         logo_path = resource_path("decloud-logo.png")
         if Image and os.path.exists(logo_path):
             try:
                 self.logo_img = ctk.CTkImage(light_image=Image.open(logo_path),
                                             dark_image=Image.open(logo_path),
-                                            size=(80, 80))
+                                            size=(60, 60)) # Slightly smaller to look cleaner in the corner
                 self.logo_label = ctk.CTkLabel(self, image=self.logo_img, text="")
-                self.logo_label.pack(pady=(10, 0))
+                # Using place instead of pack so it doesn't push elements down
+                self.logo_label.place(x=15, y=10) 
             except:
-                pass # If it fails, the app just won't show the logo
+                pass
 
         self.label = ctk.CTkLabel(self, text="🛡️ DeCloud Vault", font=("Arial", 28, "bold"), text_color="#8FBC8F")
         self.label.pack(pady=(5, 2))
@@ -142,7 +143,7 @@ class DeCloudVault(ctk.CTk):
             if os.name == 'nt':
                 winsound.MessageBeep(winsound.MB_ICONASTERISK)
             else:
-                print('\a - main.py:145')
+                print('\a - main.py:146')
         except:
             pass
 
