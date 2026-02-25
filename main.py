@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from cryptography.fernet import Fernet
 import os
+import sys
 import tempfile
 import shutil
 import subprocess
@@ -9,22 +10,43 @@ import time
 import string
 from tkinter import filedialog, messagebox
 
+# Import PIL safely for logo support
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
+
 # Platform-specific sound support
 if os.name == 'nt':
     import winsound
+
+def resource_path(relative_path):
+    """ Standard helper for PyInstaller to find files inside the EXE bundle """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class DeCloudVault(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("DeCloud Vault | Taurus Edition")
         
+        # --- 1. ICON SETUP (Safe Load) ---
+        icon_path = resource_path("decloud-logo.ico")
+        if os.name == 'nt' and os.path.exists(icon_path):
+            try:
+                self.iconbitmap(icon_path)
+            except:
+                pass 
+
         # --- Fixed Geometry and Position Fix ---
         window_width = 600
         window_height = 600
-        # Calculate position for top-center (flushed from top down)
         screen_width = self.winfo_screenwidth()
         x_cordinate = int((screen_width / 2) - (window_width / 2))
-        y_cordinate = 0 # Top of the screen
+        y_cordinate = 0 
         
         self.geometry(f"{window_width}x{window_height}+{x_cordinate}+{y_cordinate}")
         self.resizable(False, False)
@@ -32,16 +54,14 @@ class DeCloudVault(ctk.CTk):
         
         # --- App State ---
         self.font_scale = 1.0
-        self.base_font_size = 16 # Reduced slightly for 600px height
+        self.base_font_size = 16 
         self.temp_dirs = []
         self.key_path = "No Key Loaded"
         self.fernet = None 
         
-        # Security Setup - Window renders first, alerts follow 300ms later
         self.after(300, self.initial_setup)
 
         # --- UI LAYOUT ---
-        # Font frame moved to a more compact corner
         self.font_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.font_frame.place(relx=0.98, rely=0.02, anchor="ne")
         
@@ -50,8 +70,20 @@ class DeCloudVault(ctk.CTk):
         self.font_up = ctk.CTkButton(self.font_frame, text="A", width=25, height=20, command=lambda: self.change_font(1))
         self.font_up.pack(side="left", padx=1)
 
+        # --- 2. LOGO DISPLAY (Safe Load) ---
+        logo_path = resource_path("decloud-logo.png")
+        if Image and os.path.exists(logo_path):
+            try:
+                self.logo_img = ctk.CTkImage(light_image=Image.open(logo_path),
+                                            dark_image=Image.open(logo_path),
+                                            size=(80, 80))
+                self.logo_label = ctk.CTkLabel(self, image=self.logo_img, text="")
+                self.logo_label.pack(pady=(10, 0))
+            except:
+                pass # If it fails, the app just won't show the logo
+
         self.label = ctk.CTkLabel(self, text="🛡️ DeCloud Vault", font=("Arial", 28, "bold"), text_color="#8FBC8F")
-        self.label.pack(pady=(15, 2))
+        self.label.pack(pady=(5, 2))
         
         self.sub_label = ctk.CTkLabel(self, text="Batch Security for the Privacy-Conscious", font=("Arial", 14))
         self.sub_label.pack(pady=(0, 10))
@@ -86,12 +118,11 @@ class DeCloudVault(ctk.CTk):
 
         self.disclaimer_text = ctk.CTkLabel(
             self.disclaimer_frame, 
-            text="⚠️  IMPORTANT: 1. Ensure 'vault' is in the key name. 2. Copy to multiple physical drives. 3. Without this file, data is lost forever. 4. If you correctly add vault to the filename, you can search for it using the buttons below.",
+            text="⚠️ IMPORTANT: 1. Ensure 'vault' is in the key name. 2. Copy to multiple physical drives. 3. Without this file, data is lost forever. 4. If you correctly add vault to the filename, you can search for it using the buttons below.",
             text_color="#FFCCCC", wraplength=450
         )
         self.disclaimer_text.pack(pady=(2, 5))
 
-        # Search Button Container
         self.btn_container = ctk.CTkFrame(self.disclaimer_frame, fg_color="transparent")
         self.btn_container.pack(pady=(2, 8))
 
@@ -107,12 +138,11 @@ class DeCloudVault(ctk.CTk):
         self.update_font_sizes()
 
     def play_alert(self):
-        """Native system alert sound"""
         try:
             if os.name == 'nt':
                 winsound.MessageBeep(winsound.MB_ICONASTERISK)
             else:
-                print('\a - main.py:115')
+                print('\a - main.py:145')
         except:
             pass
 
@@ -155,12 +185,9 @@ class DeCloudVault(ctk.CTk):
         messagebox.showinfo("Security Requirement", 
             "Welcome to DeCloud Vault.\n\n"
             "1. Key filename must contain 'vault'.(VERY IMPORTANT)\n"
-
-"2. Redundancy: Copy to multiple physical drives.\n"
-
-"3. Offline Storage Only. DO NOT Save in Cloud Storage (e.g., Google Drive, Dropbox).\n"
-
-"4. Lost key = Lost data.", parent=self)
+            "2. Redundancy: Copy to multiple physical drives.\n"
+            "3. Offline Storage Only. DO NOT Save in Cloud Storage.\n"
+            "4. Lost key = Lost data.", parent=self)
 
         has_key = messagebox.askyesno("Key Setup", "Do you already have a 'vault' key file?", parent=self)
         

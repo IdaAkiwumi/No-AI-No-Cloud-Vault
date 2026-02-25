@@ -13,28 +13,37 @@ In an era where cloud providers scan your personal data to train AI models, **De
 ### ✨ Key Features
 * **Zero-Knowledge:** No data is sent to any server. Encryption happens entirely on your machine.
 * **Taurus-Grade Security:** A focus on physical key management. Your `vault.key` is your responsibility.
-* **Metadata Preservation:** Restored files keep their original "Date Created" and "Date Modified" timestamps.
-* **Secure Peek:** View your files in a temporary environment that wipes itself clean the moment you close the app.
-* **Vault Search:** Lost your key? Use the built-in **Quick** or **Deep Scan** to find any file on your PC containing the word "vault".
+* **Metadata Preservation:** Restored files keep their original timestamps.
+* **Secure Peek:** View files in a temporary environment that wipes itself clean on exit.
+* **Vault Search:** Built-in **Quick** or **Deep Scan** to find any `.key` file containing "vault" on your drives.
 
 ---
 
-### 🚀 How It Works
-1.  **Generate your Key:** Save your `decloud-vault.key` to a physical USB drive.
-2.  **Lock your Files:** Select files to encrypt. They will be turned into `.vault` files.
-3.  **Upload Safely:** Move these `.vault` files to Google Drive, Dropbox, or OneDrive.
-4.  **Secure Peek:** Need to check a document? Use Peek to open it without permanently decrypting it.
+### 🚀 Installation & Build
+
+#### **For Windows Users:**
+Just download the latest `DeCloudVault.exe` from the [Releases](https://github.com/YOUR_USERNAME/No-AI-No-Cloud-Vault/releases) page. No installation required.
+
+#### **For Mac & Linux Users (Newbie Friendly):**
+Since Mac and Linux require Python to run the source code, follow these steps:
+
+1.  **Install Python:** * **Mac:** Download from [Python.org](https://www.python.org/downloads/macos/) or run `brew install python` in Terminal.
+    * **Linux:** Usually pre-installed. If not, run `sudo apt install python3 python3-pip`.
+2.  **Download the Code:** Click the green **Code** button above and select **Download ZIP**. Extract it.
+3.  **Install Requirements:** Open your Terminal, navigate to the folder, and type:
+    ```bash
+    pip install customtkinter cryptography pillow
+    ```
+4.  **Run the App:** ```bash
+    python3 main.py
+    ```
 
 ---
 
-### 🛠️ Installation & Build
-**For Users:**
-Download the latest `DeCloudVault.exe` from the [Releases](https://github.com/YOUR_USERNAME/No-AI-No-Cloud-Vault/releases) page.
-
-**For Developers:**
+### 🛠️ Developer Build Instructions
 1. Clone the repo: `git clone https://github.com/IdaAkiwumi/No-AI-No-Cloud-Vault.git`
-2. Install dependencies: `pip install customtkinter cryptography`
-3. Run: `python main.py`
+2. Install dependencies: `pip install customtkinter cryptography pillow`
+3. Package as EXE: `pyinstaller --noconfirm --onefile --windowed --icon="decloud-logo.ico" --add-data "decloud-logo.png;." --add-data "decloud-logo.ico;." main.py`
 
 ---
 
