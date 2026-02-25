@@ -56,6 +56,20 @@ To bundle the app into a standalone Windows executable:
 3. **Storing:** Move the `.vault` files to your preferred cloud provider (Google Drive, iCloud, etc.).
 4. **Viewing:** Use 'Secure Peek' to open a file temporarily without permanently unlocking it.
 5. **Restoring:** Use 'Permanent Restore' when you want to turn the `.vault` file back into a regular file.
+
+## 📁 How to Encrypt Folders
+[!IMPORTANT]
+DeCloud Vault encrypts individual files. To secure an entire folder and preserve its internal structure, you must compress it first.
+
+Right-click the folder you want to secure.
+
+Select "Compress to ZIP file" (Windows) or "Compress" (macOS).
+
+Open DeCloud Vault.
+
+Click 🔒 ENCRYPT FILES and select your new .zip file.
+
+Your folder is now a secure .vault file, ready for cloud storage.
 ---
 ## 🔍 Troubleshooting & FAQ
 1. "Error: Key mismatch or corrupted file"
