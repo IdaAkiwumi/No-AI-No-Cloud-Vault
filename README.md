@@ -1,4 +1,4 @@
-# 🛡️ No-AI-No-Cloud Vault (DeCloud Vault)
+# 🛡️ No AI No Cloud Vault (DeCloud Vault)
 **Local-First, Zero-Knowledge Encryption for the Privacy-Conscious.**
 
 [![GitHub Sponsor](https://img.shields.io/badge/Sponsor-GitHub-EA4AAA?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/IdaAkiwumi)
@@ -34,7 +34,8 @@ Mac and Linux users run the app using Python. Follow these steps:
     ```bash
     pip install customtkinter cryptography pillow
     ```
-4.  **Run the App:** ```bash
+4.  **Run the App:** 
+    ```bash
     python3 main.py
     ```
 
