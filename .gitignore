@@ -1,4 +1,25 @@
+# Security: NEVER upload your actual keys
 vault.key
+*.key
+
+# Python internals
 __pycache__/
-temp_*/
 *.pyc
+*.pyo
+*.pyd
+
+# PyInstaller / Build Folders
+# These are the messy folders created when you make the EXE
+build/
+dist/
+*.spec
+
+# Temporary files from the "Peek" feature
+temp_*/
+*.tmp
+
+# IDE / System files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
