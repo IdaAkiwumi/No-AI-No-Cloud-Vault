@@ -100,5 +100,9 @@ If this tool helps you stay off the AI-grid, consider supporting the developer:
 * [Sponsor on GitHub](https://github.com/sponsors/IdaAkiwumi)
 * [Donate via PayPal](https://www.paypal.com/paypalme/iakiwumi)
 
+### Why Support This?
+
+AI models are trained on your personal data without consent. I built this tool to reclaim that privacy. Your donations keep this project open-source and free for all.
+
 ---
 *Disclaimer: This tool is provided "as is". The developer is not responsible for lost data due to lost master keys.*
